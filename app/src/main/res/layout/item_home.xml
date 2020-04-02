@@ -17,7 +17,7 @@
     <TextView
         android:id="@+id/tv_name"
         android:text="网站名"
-        android:textSize="22sp"
+        android:textSize="18sp"
         android:layout_marginTop="5dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/iv_img"
