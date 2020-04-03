@@ -561,7 +561,7 @@ public class DragImageView extends ImageView implements
         //设置图片缩放比例
         if (screen_W > 0) {
             //一般比例，即缩放效果为屏幕大小
-            if(bitmap_W>screen_W*2) {
+            if(bitmap_W>screen_W) {
                 NORMAL_SCALE = screen_W / bitmap_W;
             }
             MIN_SCALE = NORMAL_SCALE / 10;
