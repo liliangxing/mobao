@@ -621,8 +621,6 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
                     }
                 }
                 if (Constants.num_curr >= Constants.num_max) {
-                    //全部下载完
-                    Utils.showToast("所有图片下载成功");
 //                    pd.dismiss();
                     grabingDialog.dismiss();
                     //去掉勾选
