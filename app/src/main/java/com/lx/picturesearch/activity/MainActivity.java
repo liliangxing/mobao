@@ -615,11 +615,22 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
                 for (Integer position : adapter.getCheckList().keySet()) {
                     if (adapter.getCheckList().get(position)) {
                         // 当前图片需要下载
-                        downloadImage(listPic.get(position));// 子线程
+                        Constants.num_curr++;
+                        Utils.downloadImage(listPic.get(position));// 子线程
 
                     }
                 }
-
+                if (Constants.num_curr >= Constants.num_max) {
+                    //全部下载完
+                    Utils.showToast("所有图片下载成功");
+//                    pd.dismiss();
+                    grabingDialog.dismiss();
+                    //去掉勾选
+                    adapter.initCheckList();//初始化
+                    adapter.notifyDataSetChanged();
+                    iv_btn.setVisibility(View.GONE);
+                    iv_select.setVisibility(View.GONE);
+                }
             } else {
                 // 批量删除
                 for (Integer position : adapter.getCheckList().keySet()) {
@@ -718,57 +729,5 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
         Utils.showToast("深度抓取已经终止");
     }
 
-    public void downloadImage(String url) {
-        File fdir = new File(Constants.SAVE_DIR);
-        //创建文件夹
-        if (!fdir.exists()) {
-            fdir.mkdirs();
-        }
-        String fileName = Utils.cutImagePath(url);
-        String[] prefix = fileName.split("\\.");
-        String target = Constants.SAVE_DIR + "/" +  fileName;//避免重名
-        if(prefix.length>1 &&prefix[1].contains("?")
-                &&prefix[1].contains("jpg")){
-            target=target+".jpg";
-        }
-        new HttpUtils().download(url, target, new RequestCallBack<File>() {
-            @Override
-            public void onSuccess(ResponseInfo<File> fileResponseInfo) {
-                Constants.num_curr++;
-//                pd.setProgress(Constants.num_curr);
-                if (Constants.num_curr >= Constants.num_max) {
-                    //全部下载完
-                    Utils.showToast("所有图片下载成功");
-//                    pd.dismiss();
-                    grabingDialog.dismiss();
-                    //去掉勾选
-                    adapter.initCheckList();//初始化
-                    adapter.notifyDataSetChanged();
-                    iv_btn.setVisibility(View.GONE);
-                    iv_select.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException e, String s) {
-                Utils.showToast("图片" + listPic.get(Constants.num_curr) + "下载失败");
-                Constants.num_curr++;
-//                pd.setProgress(Constants.num_curr);
-                if (Constants.num_curr >= Constants.num_max) {
-                    //全部下载完
-                    Utils.showToast("所有图片下载成功");
-//                    pd.dismiss();
-                    //去掉勾选
-                    adapter.initCheckList();//初始化
-                    adapter.notifyDataSetChanged();
-
-                    iv_btn.setVisibility(View.GONE);
-                    iv_select.setVisibility(View.GONE);
-                }
-            }
-        });
-
-
-    }
 }
 

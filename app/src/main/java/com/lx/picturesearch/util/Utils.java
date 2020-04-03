@@ -4,8 +4,10 @@ import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -382,7 +384,8 @@ public class Utils {
                 &&prefix[1].contains("jpg")){
             target=target+".jpg";
         }
-        if(new File(target).exists()){
+        final File mMusicFile =  new File(target);
+        if(mMusicFile.exists()){
             Utils.showToast("图片已存在");
             return;
         }
@@ -399,6 +402,9 @@ public class Utils {
             @Override
             public void onSuccess(ResponseInfo<File> fileResponseInfo) {
                 Utils.showToast("图片下载成功");
+                // 刷新媒体库
+                Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(mMusicFile));
+                context.sendBroadcast(intent);
             }
 
             @Override
