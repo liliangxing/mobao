@@ -724,8 +724,13 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
         if (!fdir.exists()) {
             fdir.mkdirs();
         }
-        String target = Constants.SAVE_DIR + "/" + System.currentTimeMillis() + Utils.cutImagePath(url);//避免重名
-
+        String fileName = Utils.cutImagePath(url);
+        String[] prefix = fileName.split("\\.");
+        String target = Constants.SAVE_DIR + "/" +  fileName;//避免重名
+        if(prefix.length>1 &&prefix[1].contains("?")
+                &&prefix[1].contains("jpg")){
+            target=target+".jpg";
+        }
         new HttpUtils().download(url, target, new RequestCallBack<File>() {
             @Override
             public void onSuccess(ResponseInfo<File> fileResponseInfo) {

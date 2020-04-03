@@ -58,8 +58,8 @@ public class DragImageView extends ImageView implements
 
     private static final String TAG = "DragImageView";
 
-    private float MAX_SCALE = 3f;//图片放大最大倍数
-    private float MIN_SCALE = 0.5f;//图片缩小最小倍数
+    private float MAX_SCALE;//图片放大最大倍数
+    private float MIN_SCALE;//图片缩小最小倍数
     private float NORMAL_SCALE=1f;//正常倍数，缩放效果为屏幕宽度
 
     private Matrix matrix = new Matrix();
@@ -561,9 +561,11 @@ public class DragImageView extends ImageView implements
         //设置图片缩放比例
         if (screen_W > 0) {
             //一般比例，即缩放效果为屏幕大小
-            NORMAL_SCALE =   bitmap_W / bitmap_W;
-            MIN_SCALE = NORMAL_SCALE / 2;
-            MAX_SCALE = NORMAL_SCALE * 3;
+            if(bitmap_W>screen_W*2) {
+                NORMAL_SCALE = screen_W / bitmap_W;
+            }
+            MIN_SCALE = NORMAL_SCALE / 10;
+            MAX_SCALE = NORMAL_SCALE * 10;
         }
 
         super.setImageBitmap(bm);

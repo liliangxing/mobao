@@ -375,12 +375,27 @@ public class Utils {
         if(!fdir.exists()){
             fdir.mkdirs();
         }
-        String target = Constants.SAVE_DIR + "/" +  Utils.cutImagePath(url);//避免重名
+        String fileName = Utils.cutImagePath(url);
+        String[] prefix = fileName.split("\\.");
+        String target = Constants.SAVE_DIR + "/" +  fileName;//避免重名
+        if(prefix.length>1 &&prefix[1].contains("?")
+                &&prefix[1].contains("jpg")){
+            target=target+".jpg";
+        }
         if(new File(target).exists()){
             Utils.showToast("图片已存在");
             return;
         }
         new HttpUtils().download(url,target,new RequestCallBack<File>() {
+            @Override
+            public void onStart() {
+                Utils.showToast("开始下载");
+            }
+            @Override
+            public void onLoading(long total, long current, boolean isUploading) {
+                double progress = Math.floor(1000.0*current/total)/10;
+                Utils.showToast("图片下载..."+progress+"%");
+            }
             @Override
             public void onSuccess(ResponseInfo<File> fileResponseInfo) {
                 Utils.showToast("图片下载成功");

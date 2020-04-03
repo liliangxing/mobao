@@ -12,7 +12,7 @@ public class Constants {
     public static final String P_URL = "url";
     public static final String P_POS = "pos";
 
-    public static final String SAVE_DIR = Utils.getSDCardPath() + "/mypics";
+    public static final String SAVE_DIR = Utils.getSDCardPath() + "/Pictures/mobao";
 
     public static final int S_WEB = 0;//网络图片
     public static final int S_SDCARD = 1;//本地图片
