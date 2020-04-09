@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lidroid.xutils.bitmap.core.BitmapSize;
 import com.lx.picturesearch.R;
 import com.lx.picturesearch.util.Utils;
 import com.z.dragimageviewapplication.util.UiUtils;
@@ -100,6 +101,8 @@ public class ImgDetailFragment extends Fragment {
         String uri = imgResourceId;
         //改造bitmapUtuils
         imageView.setVisibility(View.VISIBLE);
+        BitmapSize bitmapSize = new BitmapSize(10000,10000);
+        Utils.getBitmapUtils().configDefaultBitmapMaxSize(bitmapSize);
         Utils.getBitmapUtils().display(imageView,uri);
 
 //        setBitmap(bitmap);// 显示图片

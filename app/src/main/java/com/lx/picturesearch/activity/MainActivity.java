@@ -357,9 +357,6 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
                         doParsePicture(imgs,links);
                         doMobaoUrl();
                             //UI
-                        adapter.setList(listPic);
-                        adapter.notifyDataSetChanged();
-
                         Constants.state = Constants.S_WEB;
                         update_infobar(query);
 
