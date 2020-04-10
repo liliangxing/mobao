@@ -73,8 +73,6 @@ public class ImageAdapter extends BaseAdapter {
         this.mPargerSize = mPargerSize;
         inflater =LayoutInflater.from(context);
         bitmapUtils = Utils.getBitmapUtils();
-        BitmapSize bitmapSize = new BitmapSize(420,420);
-        bitmapUtils.configDefaultBitmapMaxSize(bitmapSize);
         bitmapUtils.configDefaultLoadingImage(R.drawable.default_image);
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.default_image);
         bitmapUtils.configDefaultBitmapConfig(Bitmap.Config.RGB_565);
@@ -128,6 +126,9 @@ public class ImageAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         String url = list.get(position+ mIndex * mPargerSize);
+
+        BitmapSize bitmapSize = new BitmapSize(420,420);
+        bitmapUtils.configDefaultBitmapMaxSize(bitmapSize);
         bitmapUtils.display(holder.img,url);// 显示图片
 
         // 根据哈希表决定item选中状态
