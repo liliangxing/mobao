@@ -98,8 +98,6 @@ public class DragImageActivity extends FragmentActivity implements View.OnClickL
         } else {
             iv_dl.setImageResource(R.drawable.toolbar_pop_send_press);
         }
-
-        initDots();//页面标记
     }
 
     private void initListener() {
@@ -193,39 +191,6 @@ public class DragImageActivity extends FragmentActivity implements View.OnClickL
         }
     }
 
-    /**
-     * 初始化指示点，根据图片数组数量创建指示点
-     */
-    private void initDots() {
-
-
-//        //只有一张图片，或者没有图片，不创建指示点
-//        if (imgLists.size() <= 1) {
-//            return;
-//        }
-//        //指示点的容器，横向linearLayout
-//        LinearLayout ll = (LinearLayout) findViewById(R.id.indicator);
-//
-//        dots = new ImageView[imgLists.size()];
-//
-//        //两个指示点之间间隙
-//        int dip5 = UiUtils.dip2px(this, 5);
-//
-//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(dip5 * 2, dip5, 1);
-//        layoutParams.setMargins(dip5 / 2, 0, dip5 / 2, 0);
-//
-//
-//        // 循环取得小点图片
-//        for (int i = 0; i < imgLists.size(); i++) {
-//
-//            ImageView imageView = new ImageView(this);
-//            dots[i] = imageView;
-//            dots[i].setBackgroundColor(Color.WHITE);// 都设为白色
-//            ll.addView(dots[i], layoutParams);
-//        }
-//
-//        dots[iIndex].setBackgroundColor(Color.RED);// 设置为白色，即选中状态
-    }
 
     /**
      * 设置指示点的选中位置
@@ -242,16 +207,6 @@ public class DragImageActivity extends FragmentActivity implements View.OnClickL
         }
         String str = Utils.cutImagePath(imgLists.get(position));
         tv_name.setText(str.substring(0,str.length()>20?20:str.length()));
-
-
-//        if (position < 0 || position > imgLists.size() - 1 || imgLists.size() <= 1
-//                || iIndex == position) {
-//            return;
-//        }
-//
-//        dots[position].setBackgroundColor(Color.RED);
-//        dots[iIndex].setBackgroundColor(Color.WHITE);
-
         iIndex = position;
     }
 }

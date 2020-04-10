@@ -117,7 +117,6 @@ public class ImageAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item, null);
             holder = new ViewHolder();
             holder.img = (ImageView) convertView.findViewById(R.id.iv_img);
-            //holder.pb = (ProgressBar) convertView.findViewById(R.id.pb);
             holder.iv_select = (ImageView) convertView.findViewById(R.id.iv_select);
             holder.box = (RelativeLayout) convertView.findViewById(R.id.right_box);
 
@@ -151,37 +150,8 @@ public class ImageAdapter extends BaseAdapter {
 
         return convertView;
     }
-
-  /*  public class MyCallBack extends DefaultBitmapLoadCallBack<ImageView>{
-        ViewHolder holder;
-
-        public MyCallBack(ViewHolder holder){
-            this.holder = holder;
-        }
-
-        @Override
-        public void onLoadStarted(ImageView container, String uri, BitmapDisplayConfig config) {
-//            this.holder.pb.setProgress(0);
-            super.onLoadStarted(container, uri, config);
-        }
-
-        @Override
-        public void onLoading(ImageView container, String uri, BitmapDisplayConfig config, long total, long current) {
-//           this.holder.pb.setProgress((int) (current*100/total));
-        }
-
-        @Override
-        public void onLoadCompleted(ImageView container, String uri, Bitmap bitmap, BitmapDisplayConfig config, BitmapLoadFrom from) {
-//            this.holder.pb.setProgress(100);
-            super.onLoadCompleted(container, uri, bitmap, config, from);
-        }
-
-    }*/
-
-
     public  class ViewHolder{
         ImageView img;
-//        ProgressBar pb;
         RelativeLayout box;
         ImageView iv_select;
     }

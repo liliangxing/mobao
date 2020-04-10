@@ -309,24 +309,7 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
         if (v.getId() == R.id.btn_stop) {
             stopGrab();
         }
-
     }
-
-//    ProgressDialog pd;  //对话框对象
-
-   /* //信息
-    public void showProgressDialog(String msg) {
-        pd = new ProgressDialog(this);
-        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pd.setTitle("提示信息");
-        pd.setMessage(msg);
-        pd.setCancelable(true);
-        pd.show();
-
-    }*/
-
-
-
 
     //系统后退
     @Override
@@ -399,7 +382,6 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
         if (!query.startsWith("http")) {
             currURL = "http://" + query;
         }
-//        showProgressDialog("正在搜索" + currURL + "网页上的图片");
         grabingDialog.show();
         pb_hor.setVisibility(View.VISIBLE);
         new HttpUtils().send(
@@ -670,13 +652,7 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
                 // 批量下载
                 Constants.num_max = getSelectedNumber();
                 Constants.num_curr = 0;
-                // 添加下载进度(水平)
-//                showProgressDialog("开始批量下载");
                 grabingDialog.show();
-//                pd.setTitle("批量下载");
-//                pd.setMax(Constants.num_max);
-//                pd.setProgress(Constants.num_curr);
-                // 遍历哈希表, 哪些选中的item是下载的图片
                 for (Integer position : adapter.getCheckList().keySet()) {
                     if (adapter.getCheckList().get(position)) {
                         // 当前图片需要下载

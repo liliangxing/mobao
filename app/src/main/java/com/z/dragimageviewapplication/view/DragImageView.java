@@ -1,21 +1,16 @@
 package com.z.dragimageviewapplication.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.FloatMath;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 
@@ -25,7 +20,6 @@ import android.widget.ImageView;
 public class DragImageView extends ImageView implements
         ScaleGestureDetector.OnScaleGestureListener {
 
-    private boolean mOnce;
     //初始化时缩放的值
     private float mInitScale;
     //双击放大值到达的值
@@ -35,20 +29,7 @@ public class DragImageView extends ImageView implements
 
     private Matrix mScaleMatrix;
 
-    //捕获用户多指触控时缩放的比例
-    private ScaleGestureDetector mScaleGestureDetector;
 
-    //记录上一次多点触控的数量
-    private int mLastPointerCount;
-
-    private float mLastX;
-    private float mLastY;
-
-    private int mTouchSlop;
-    private boolean isCanDrag;
-
-    private boolean isCheckLeftAndRight;
-    private boolean isCheckTopAndBottom;
 
     /*********双击放大与缩小*********/
     private GestureDetector mGestureDetector;
@@ -107,12 +88,7 @@ public class DragImageView extends ImageView implements
 
     public DragImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        // init
         mScaleMatrix = new Matrix();
-        //setScaleType(ScaleType.MATRIX);
-        //setOnTouchListener(this);
-        //mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
-        //mScaleGestureDetector = new ScaleGestureDetector(context, this);
         mGestureDetector = new GestureDetector(context,
                 new GestureDetector.SimpleOnGestureListener() {
                     @Override
@@ -194,85 +170,6 @@ public class DragImageView extends ImageView implements
                 isAutoScale = false;
             }
         }
-    }
-
-   /* *//**
-     * 获取ImageView加载完成的图片
-     *//*
-    @Override
-    public void onGlobalLayout() {
-        if (!mOnce) {
-            // 得到控件的宽和高
-            int width = getWidth();
-            int height = getHeight();
-
-            // 得到我们的图片，以及宽和高
-            Drawable drawable = getDrawable();
-            if (drawable == null) {
-                return;
-            }
-            int dh = drawable.getIntrinsicHeight();
-            int dw = drawable.getIntrinsicWidth();
-
-            float scale = 1.0f;
-
-            // 图片的宽度大于控件的宽度，图片的高度小于空间的高度，我们将其缩小
-            if (dw > width && dh < height) {
-                scale = width * 1.0f / dw;
-            }
-
-            // 图片的宽度小于控件的宽度，图片的高度大于空间的高度，我们将其缩小
-            if (dh > height && dw < width) {
-                scale = height * 1.0f / dh;
-            }
-
-            // 缩小值
-            if (dw > width && dh > height) {
-                scale = Math.min(width * 1.0f / dw, height * 1.0f / dh);
-            }
-
-            // 放大值
-            if (dw < width && dh < height) {
-                scale = Math.min(width * 1.0f / dw, height * 1.0f / dh);
-            }
-
-            *//**
-             * 得到了初始化时缩放的比例
-             *//*
-            mInitScale = scale;
-            mMaxScale = mInitScale * 4;
-            mMidScale = mInitScale * 2;
-
-            // 将图片移动至控件的中间
-            int dx = getWidth() / 2 - dw / 2;
-            int dy = getHeight() / 2 - dh / 2;
-
-            mScaleMatrix.postTranslate(dx, dy);
-            mScaleMatrix.postScale(mInitScale, mInitScale, width / 2,
-                    height / 2);
-            setImageMatrix(mScaleMatrix);
-
-            mOnce = true;
-        }
-    }*/
-
-    /**
-     * 注册OnGlobalLayoutListener这个接口
-     */
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        //getViewTreeObserver().addOnGlobalLayoutListener(this);
-    }
-
-    /**
-     * 取消OnGlobalLayoutListener这个接口
-     */
-    @SuppressWarnings("deprecation")
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        //getViewTreeObserver().removeGlobalOnLayoutListener(this);
     }
 
     /**
@@ -389,164 +286,6 @@ public class DragImageView extends ImageView implements
 
     }
 
-   /* @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
-        if (mGestureDetector.onTouchEvent(event)) {
-            return true;
-        }
-        *//** 处理单点、多点触摸 **//*
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                onTouchDown(event);
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                onPointerDown(event);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                //处理手指移动时的事件
-                onTouchMove(event);
-
-                if (isNeedIntercept) {
-//                    返回false，让父类控件处理
-                    isNeedIntercept=false;
-                    return false;
-                }
-
-                break;
-            case MotionEvent.ACTION_UP:
-                mode = MODE.NONE;
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-               *//* mode = MODE.NONE;
-                *//**//** 执行缩放还原 **//**//*
-                if (isScaleRestore) {
-                    doScaleAnim();
-                    isScaleRestore=false;
-                }*//*
-                break;
-            case MotionEvent.ACTION_CANCEL:
-                getParent().requestDisallowInterceptTouchEvent(false);
-                break;
-        }
-
-        setImageMatrix(matrix);
-        return true;
-
-       *//* mScaleGestureDetector.onTouchEvent(event);
-
-        float x = 0;
-        float y = 0;
-        // 拿到多点触控的数量
-        int pointerCount = event.getPointerCount();
-        for (int i = 0; i < pointerCount; i++) {
-            x += event.getX(i);
-            y += event.getY(i);
-        }
-
-        x /= pointerCount;
-        y /= pointerCount;
-
-        if (mLastPointerCount != pointerCount) {
-            isCanDrag = false;
-            mLastX = x;
-            mLastY = y;
-        }
-        mLastPointerCount = pointerCount;
-        RectF rectF = getMatrixRectF();
-        switch (event.getAction()) {
-
-            case MotionEvent.ACTION_DOWN:
-                if (rectF.width()>getWidth() +0.01|| rectF.height()>getHeight()+0.01) {
-                    if(getParent() instanceof ViewPager)
-                        getParent().requestDisallowInterceptTouchEvent(true);
-                }
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                if (rectF.width()>getWidth()+0.01 || rectF.height()>getHeight()+0.01) {
-                    if(getParent() instanceof ViewPager)
-                        getParent().requestDisallowInterceptTouchEvent(true);
-                }
-                float dx = x - mLastX;
-                float dy = y - mLastY;
-
-                if (!isCanDrag) {
-                    isCanDrag = isMoveAction(dx, dy);
-                }
-
-                if (isCanDrag) {
-                    if (getDrawable() != null) {
-                        isCheckLeftAndRight = isCheckTopAndBottom = true;
-                        // 如果宽度小于控件宽度，不允许横向移动
-                        if (rectF.width() < getWidth()) {
-                            isCheckLeftAndRight = false;
-                            dx = 0;
-                        }
-                        // 如果高度小于控件高度，不允许纵向移动
-                        if (rectF.height() < getHeight()) {
-                            isCheckTopAndBottom = false;
-                            dy = 0;
-                        }
-                        mScaleMatrix.postTranslate(dx, dy);
-
-                        checkBorderWhenTranslate();
-
-                        setImageMatrix(mScaleMatrix);
-                    }
-                }
-                mLastX = x;
-                mLastY = y;
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                mLastPointerCount = 0;
-                break;
-
-            default:
-                break;
-        }
-*//*
-        //return true;
-    }*/
-
-    /**
-     * 当移动时进行边界检查
-     */
-    private void checkBorderWhenTranslate() {
-        RectF rectF = getMatrixRectF();
-        float deltaX = 0;
-        float deltaY = 0;
-
-        int width = getWidth();
-        int heigth = getHeight();
-
-        if (rectF.top > 0 && isCheckTopAndBottom) {
-            deltaY = -rectF.top;
-        }
-        if (rectF.bottom < heigth && isCheckTopAndBottom) {
-            deltaY = heigth - rectF.bottom;
-        }
-        if (rectF.left > 0 && isCheckLeftAndRight) {
-            deltaX = -rectF.left;
-        }
-        if (rectF.right < width && isCheckLeftAndRight) {
-            deltaX = width - rectF.right;
-        }
-        mScaleMatrix.postTranslate(deltaX, deltaY);
-
-    }
-
-    /**
-     * 判断是否是move
-     *
-     * @param dx
-     * @param dy
-     * @return
-     */
-    private boolean isMoveAction(float dx, float dy) {
-        return Math.sqrt(dx * dx + dy * dy) > mTouchSlop;
-    }
 
     /**
      * 设置显示图片
@@ -889,6 +628,5 @@ public class DragImageView extends ImageView implements
         if (isDragBackHorizontal || isDragBackVertical)
             matrix.postTranslate(dx, dy);
     }
-
 
 }
