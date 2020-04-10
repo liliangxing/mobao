@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class DragImageActivity extends FragmentActivity implements View.OnClickListener {
 
     private ViewPager mViewPager;
-    private int iIndex;
+    private int iIndex,mIndex,mPageSize,mTotal;
     private TextView tv_name, tv_pageno;
     private ImageView iv_dl;
 
@@ -47,6 +47,9 @@ public class DragImageActivity extends FragmentActivity implements View.OnClickL
 
         imgIds = getIntent().getStringArrayExtra(Constants.P_URL);
         iIndex = getIntent().getIntExtra(Constants.P_POS, 0);
+        mIndex = getIntent().getIntExtra(Constants.P_INDEX, 0);
+        mPageSize = getIntent().getIntExtra(Constants.P_PAGESIZE, 0);
+        mTotal = getIntent().getIntExtra(Constants.P_TOTAL, 0);
 
         initData();
         if(imgIds[iIndex].startsWith("http")){
@@ -230,9 +233,13 @@ public class DragImageActivity extends FragmentActivity implements View.OnClickL
      * @param position
      */
     private void setCurrentDot(int position) {
-
-        int curr = position + 1;
-        tv_pageno.setText(curr + "/" + total);
+        if(position == 0|| position == total) {
+            tv_pageno.setText((position + 1) + "/" + total + " (" + (position + 1
+                    + mIndex * mPageSize) + "/" + mTotal + ")");
+        }else {
+            tv_pageno.setText((position + 1
+                    + mIndex * mPageSize) + "/" + mTotal);
+        }
         String str = Utils.cutImagePath(imgLists.get(position));
         tv_name.setText(str.substring(0,str.length()>20?20:str.length()));
 

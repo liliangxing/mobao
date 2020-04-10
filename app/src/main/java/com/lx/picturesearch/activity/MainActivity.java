@@ -724,6 +724,9 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
         Intent intent = new Intent(this, DragImageActivity.class);
         intent.putExtra(Constants.P_URL, listToArray());//图片地址
         intent.putExtra(Constants.P_POS, position);//图片位置
+        intent.putExtra(Constants.P_INDEX, viewPager.getCurrentItem());
+        intent.putExtra(Constants.P_PAGESIZE, mPageSize);
+        intent.putExtra(Constants.P_TOTAL, listPic.size());
         startActivity(intent);
     }
 

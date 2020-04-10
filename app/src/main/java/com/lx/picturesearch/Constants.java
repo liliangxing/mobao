@@ -11,6 +11,9 @@ public class Constants {
     //传递图片网址的关键字
     public static final String P_URL = "url";
     public static final String P_POS = "pos";
+    public static final String P_INDEX = "mIndex";
+    public static final String P_PAGESIZE = "mPageSize";
+    public static final String P_TOTAL = "mTotal";
 
     public static final String SAVE_DIR = Utils.getSDCardPath() + "/Pictures/mobao";
 
