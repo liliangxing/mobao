@@ -101,7 +101,7 @@ public class ImgDetailFragment extends Fragment {
         String uri = imgResourceId;
         //改造bitmapUtuils
         imageView.setVisibility(View.VISIBLE);
-        BitmapSize bitmapSize = new BitmapSize(3000,3000);
+        BitmapSize bitmapSize = new BitmapSize(4000,4000);
         Utils.getBitmapUtils().configDefaultBitmapMaxSize(bitmapSize);
         Utils.getBitmapUtils().display(imageView,uri);
 

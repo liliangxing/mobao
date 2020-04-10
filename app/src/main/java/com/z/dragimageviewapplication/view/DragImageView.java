@@ -568,8 +568,9 @@ public class DragImageView extends ImageView implements
                 NORMAL_SCALE = NORMAL_SCALE<(screen_H / bitmap_H)?
                         NORMAL_SCALE:(screen_H*0.85f / bitmap_H);
             }
-            MIN_SCALE = NORMAL_SCALE / 10;
-            MAX_SCALE = NORMAL_SCALE * 10;
+            float factor= 10;
+            MIN_SCALE = NORMAL_SCALE / factor;
+            MAX_SCALE = NORMAL_SCALE * factor;
         }
 
         super.setImageBitmap(bm);
@@ -803,7 +804,7 @@ public class DragImageView extends ImageView implements
         if (scale > NORMAL_SCALE && beforeScale <= MAX_SCALE) {
             // 放大
             isCanScale = true;
-        }else if (scale < NORMAL_SCALE && beforeScale >= MIN_SCALE) {
+        }else if ((scale < NORMAL_SCALE ||scale < 1)&& beforeScale >= MIN_SCALE) {
             // 缩小
             isCanScale = true;
             isScaleRestore = true;
