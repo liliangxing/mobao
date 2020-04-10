@@ -206,6 +206,9 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
         pb_hor.setMax(numTotalLinks);
         pb_hor.setProgress(numCurrLinks);
         doSimilarLink(similarLinks);
+        if(similarLinks.isEmpty()){
+            update_final("");
+        }
     }
 
     private void doSimilarLink(List<String> similarLinks){

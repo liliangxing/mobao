@@ -233,7 +233,7 @@ public class SearchActivity extends Activity implements View.OnClickListener, Te
 
         @Override
         public void afterTextChanged(Editable s) {
-            if(!s.toString().startsWith("http://")) {
+            if(!s.toString().startsWith("http")) {
                 inputUrl = "http://" + s;
             }else {
                 inputUrl = ""+s;
