@@ -29,6 +29,7 @@ public class ImgDetailFragment extends Fragment {
     private int screenWidth;//屏幕宽度
     private int screenHeight;//屏幕高度
     private int stateHeight =0;//状态栏高度
+    private  final static BitmapSize bitmapSize = new BitmapSize(4000,4000);
 
 
     /**
@@ -101,7 +102,6 @@ public class ImgDetailFragment extends Fragment {
         String uri = imgResourceId;
         //改造bitmapUtuils
         imageView.setVisibility(View.VISIBLE);
-        BitmapSize bitmapSize = new BitmapSize(4000,4000);
         Utils.getBitmapUtils().configDefaultBitmapMaxSize(bitmapSize);
         Utils.getBitmapUtils().display(imageView,uri);
 

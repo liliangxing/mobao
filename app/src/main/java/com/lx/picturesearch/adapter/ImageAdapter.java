@@ -24,7 +24,7 @@ import java.util.Map;
  * Created by Administrator on 2016/12/18.
  */
 public class ImageAdapter extends BaseAdapter {
-
+    private final  static BitmapSize bitmapSize = new BitmapSize(420,420);
     //声明接口
     ISelect iSelect;
 
@@ -125,8 +125,6 @@ public class ImageAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         String url = list.get(position+ mIndex * mPargerSize);
-
-        BitmapSize bitmapSize = new BitmapSize(420,420);
         bitmapUtils.configDefaultBitmapMaxSize(bitmapSize);
         bitmapUtils.display(holder.img,url);// 显示图片
 
