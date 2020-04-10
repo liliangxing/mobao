@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.bitmap.core.BitmapSize;
 import com.lx.picturesearch.ISelect;
 import com.lx.picturesearch.R;
 import com.lx.picturesearch.util.Utils;
@@ -72,6 +73,8 @@ public class ImageAdapter extends BaseAdapter {
         this.mPargerSize = mPargerSize;
         inflater =LayoutInflater.from(context);
         bitmapUtils = Utils.getBitmapUtils();
+        BitmapSize bitmapSize = new BitmapSize(420,420);
+        bitmapUtils.configDefaultBitmapMaxSize(bitmapSize);
         bitmapUtils.configDefaultLoadingImage(R.drawable.default_image);
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.default_image);
         bitmapUtils.configDefaultBitmapConfig(Bitmap.Config.RGB_565);
