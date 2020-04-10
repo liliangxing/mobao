@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ import com.lx.picturesearch.Constants;
 import com.lx.picturesearch.ISelect;
 import com.lx.picturesearch.R;
 import com.lx.picturesearch.adapter.ImageAdapter;
+import com.lx.picturesearch.adapter.MyViewPagerAdapter;
 import com.lx.picturesearch.util.Utils;
 import com.z.dragimageviewapplication.DragImageActivity;
 
@@ -42,8 +45,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class MainActivity extends Activity implements View.OnClickListener, ISelect, AdapterView.OnItemClickListener {
 
@@ -68,7 +69,82 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
     Dialog grabingDialog;//正在抓取自定义对话框
 
     String html;
-    List<String> listPic;
+    List<String> listPic =  new ArrayList<String>();
+
+
+    private ViewPager viewPager;
+    private LinearLayout group;//圆点指示器
+    private ImageView[] ivPoints;//小圆点图片的集合
+    private int totalPage; //总的页数
+    private int mPageSize = 100; //每页显示的最大的数量
+    private int viewPagerPosition;
+    private List<View> viewPagerList;//GridView作为一个View对象添加到ViewPager集合中
+    private Map<Integer,ImageAdapter> viewMap = new HashMap<Integer, ImageAdapter>();
+
+
+    private void rebuild(){
+        initView1();
+        initData();
+        adapter =viewMap.get(viewPagerPosition);
+    }
+    private void initView1() {
+        // TODO Auto-generated method stub
+        viewPager = (ViewPager)findViewById(R.id.viewpager);
+        group = (LinearLayout)findViewById(R.id.points);
+
+
+    }
+    private void initData() {
+        // TODO Auto-generated method stub
+        //总的页数向上取整
+        totalPage = (int) Math.ceil(listPic.size() * 1.0 / mPageSize);
+        viewPagerList = new ArrayList<View>();
+        for(int i = 0; i < totalPage; i++){
+            //每个页面都是inflate出一个新实例
+            final GridView gridView = (GridView)View.inflate(this, R.layout.item_gridview, null);
+            ImageAdapter adapter1 = new ImageAdapter(this, listPic, i, mPageSize);
+             adapter1.setiSelect(this);
+            gridView.setAdapter(adapter1);
+            viewMap.put(i,adapter1);
+            //添加item点击监听
+            gridView.setOnItemClickListener(this);
+
+            //每一个GridView作为一个View对象添加到ViewPager集合中      
+            viewPagerList.add(gridView);
+        }
+        //设置ViewPager适配器
+        viewPager.setAdapter(new MyViewPagerAdapter(viewPagerList));
+
+        //添加小圆点
+        ivPoints = new ImageView[totalPage];
+        for(int i = 0; i < totalPage; i++){
+            //循坏加入点点图片组
+            ivPoints[i] = new ImageView(this);
+            if(i==0){
+                ivPoints[i].setImageResource(R.drawable.list_longpressed_holo);
+            }else {
+                ivPoints[i].setImageResource(R.drawable.list_longpressed_holo_light);
+            }
+            ivPoints[i].setPadding(8, 8, 8, 8);
+            group.addView(ivPoints[i]);
+        }
+        //设置ViewPager的滑动监听，主要是设置点点的背景颜色的改变
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position) {
+                // TODO Auto-generated method stub
+                //currentPage = position;
+                viewPagerPosition = position;
+                for(int i=0 ; i < totalPage; i++){
+                    if(i == position){
+                        ivPoints[i].setImageResource(R.drawable.list_longpressed_holo);
+                    }else {
+                        ivPoints[i].setImageResource(R.drawable.list_longpressed_holo_light);
+                    }
+                }
+            }
+        });
+    }
 
 
     @Override
@@ -104,8 +180,7 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
             // 获取文件信息
             menu_main_corner.setVisibility(View.GONE);
             listPic = getDownloadImages(Constants.SAVE_DIR);
-            adapter.setList(listPic);
-            adapter.notifyDataSetChanged();
+            rebuild();
             Constants.state = Constants.S_SDCARD;// 更新状态
             update_infobar("");
         }else{
@@ -127,6 +202,9 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
                 similarLinks.add(siteBuilder.replaceAll("xxxx",i+""));
             }
         }
+        numTotalLinks = similarLinks.size();
+        pb_hor.setMax(numTotalLinks);
+        pb_hor.setProgress(numCurrLinks);
         doSimilarLink(similarLinks);
     }
 
@@ -166,23 +244,12 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
         rl_deep_search = (RelativeLayout) findViewById(R.id.rl_deep_search);
         rl_main_check_picture = (RelativeLayout) findViewById(R.id.rl_main_check_picture);
         iv_main_back = (ImageView) findViewById(R.id.iv_main_back);
-        gv_main = (GridView) findViewById(R.id.gv_main);
         tv_info = (TextView) findViewById(R.id.tv_info);
         btn_stop = (Button) findViewById(R.id.btn_stop);
         iv_btn = (ImageView) findViewById(R.id.iv_btn);
         iv_select = (ImageView) findViewById(R.id.iv_select);
         pb_hor = (ProgressBar) findViewById(R.id.pb_hor);
-
         drawer_main = (DrawerLayout) findViewById(R.id.drawer_main);
-
-
-        adapter = new ImageAdapter(this);
-        adapter.setiSelect(this);
-        listPic = new ArrayList<String>();
-        gv_main.setAdapter(adapter);
-        gv_main.setOnItemClickListener(this);
-
-
     }
 
     //初始化右上角的隐藏图标
@@ -331,6 +398,7 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
         }
 //        showProgressDialog("正在搜索" + currURL + "网页上的图片");
         grabingDialog.show();
+        pb_hor.setVisibility(View.VISIBLE);
         new HttpUtils().send(
                 HttpRequest.HttpMethod.GET,
                 currURL,
@@ -360,7 +428,7 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
                         Constants.state = Constants.S_WEB;
                         update_infobar(query);
 
-                        grabingDialog.dismiss();
+                       // grabingDialog.dismiss();
 //                        pd.dismiss();
                     }
 
@@ -505,19 +573,16 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
         // 处理进度条
         numCurrLinks++;
         pb_hor.setProgress(numCurrLinks);
-        tv_info.setText("深度搜索中("+numCurrLinks+"/"+numTotalLinks+")," + href );
-        adapter.setList(listPic);
-        adapter.notifyDataSetChanged();
-
-
+        tv_info.setText("总共搜索到" + listPic.size() + "张图片!");
+        //tv_info.setText("深度搜索中("+numCurrLinks+"/"+numTotalLinks+")," + href );
         if (numCurrLinks >= numTotalLinks) {// 最后一名
             pb_hor.setProgress(numTotalLinks);
             pb_hor.setVisibility(View.GONE);
             btn_stop.setVisibility(View.GONE);
-
+            grabingDialog.dismiss();
             update_infobar(currquery);
             inDeepSearch = false;
-
+            rebuild();
         }
     }
 
@@ -641,8 +706,7 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
                 Utils.showToast("所有图片删除完毕!");
                 // 列表更新
                 listPic = getDownloadImages(Constants.SAVE_DIR);
-                adapter.setList(listPic);
-                adapter.notifyDataSetChanged();
+                rebuild();
                 Constants.state = Constants.S_SDCARD;// 更新状态
                 update_infobar("");
                 iv_btn.setVisibility(View.GONE);
@@ -664,9 +728,10 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
     }
 
     private String[] listToArray() {
-        String[] arr = new String[listPic.size()];
-        for (int i = 0; i < listPic.size(); i++) {
-            arr[i] = listPic.get(i);
+        ImageAdapter adapter1 = new ImageAdapter(this, listPic, viewPager.getCurrentItem(), mPageSize);
+        String[] arr = new String[adapter1.getCount()];
+        for (int i = 0; i < adapter1.getCount(); i++) {
+            arr[i] = listPic.get((int)adapter1.getItemId(i));
         }
         return arr;
     }

@@ -94,16 +94,20 @@
             </RelativeLayout>
 
 
-            <!-- 网格视图 -->
-            <GridView
-                android:id="@+id/gv_main"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
                 android:layout_below="@id/top"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/points"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:numColumns="3"
-                android:verticalSpacing="1dp"
-                android:horizontalSpacing="1dp"
-                />
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal" />
 
             </RelativeLayout>
 

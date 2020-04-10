@@ -59,11 +59,17 @@ public class ImageAdapter extends BaseAdapter {
 
     /**反射器*/
     LayoutInflater inflater;
+    private int mIndex; // 页数下标，标示第几页，从0开始
+    private int mPargerSize;// 每页显示的最大的数量
 
     public ImageAdapter() {}
 
     /**构造器*/
-    public ImageAdapter(Context context) {
+    public ImageAdapter(Context context, List<String> lists,
+                        int mIndex, int mPargerSize) {
+        this.list = lists;
+        this.mIndex = mIndex;
+        this.mPargerSize = mPargerSize;
         inflater =LayoutInflater.from(context);
         bitmapUtils = Utils.getBitmapUtils();
         bitmapUtils.configDefaultLoadingImage(R.drawable.default_image);
@@ -72,31 +78,35 @@ public class ImageAdapter extends BaseAdapter {
 
         bitmapUtils.configMemoryCacheEnabled(true);//内存缓存
         bitmapUtils.configDiskCacheEnabled(true);//磁盘缓存
+        initCheckList();
     }
 
     /**
      * 传入数据集合
      * @param list
      */
-    public void setList(List<String> list) {
+    public void setList(List<String> list,int mIndex, int mPargerSize) {
         this.list = list;
+        this.mIndex = mIndex;
+        this.mPargerSize = mPargerSize;
         initCheckList();
     }
 
 
     @Override
     public int getCount() {
-        return (list==null)?0:list.size();
+          return list.size() > (mIndex + 1) * mPargerSize ?
+                mPargerSize : (list.size() - mIndex*mPargerSize);
     }
 
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+          return list.get(position + mIndex * mPargerSize);
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return position + mIndex * mPargerSize;
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -114,11 +124,11 @@ public class ImageAdapter extends BaseAdapter {
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-        String url = list.get(position);
+        String url = list.get(position+ mIndex * mPargerSize);
         bitmapUtils.display(holder.img,url);// 显示图片
 
         // 根据哈希表决定item选中状态
-        if (checkList.get(position)){// 选中
+        if (checkList.get(position+ mIndex * mPargerSize)){// 选中
             holder.iv_select.setImageResource(R.drawable.blue_selected);
         }else{// 不选中
             holder.iv_select.setImageResource(R.drawable.blue_unselected);
@@ -129,7 +139,7 @@ public class ImageAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 // 把业务逻辑转移到外面
-                iSelect.handleSelected(position);
+                iSelect.handleSelected(position+ mIndex * mPargerSize);
             }
         });
 
