@@ -565,7 +565,7 @@ public class DragImageView extends ImageView implements
                 NORMAL_SCALE = screen_W / bitmap_W;
             }
             if(bitmap_H>screen_H) {
-                NORMAL_SCALE = NORMAL_SCALE<(screen_H*0.9f / bitmap_H)?
+                NORMAL_SCALE = NORMAL_SCALE<(screen_H*0.85f / bitmap_H)?
                         NORMAL_SCALE:(screen_H*0.85f / bitmap_H);
             }
             float factor= 10;
