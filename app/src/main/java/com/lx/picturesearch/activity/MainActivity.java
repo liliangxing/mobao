@@ -32,6 +32,7 @@ import com.lx.picturesearch.ISelect;
 import com.lx.picturesearch.R;
 import com.lx.picturesearch.adapter.ImageAdapter;
 import com.lx.picturesearch.adapter.MyViewPagerAdapter;
+import com.lx.picturesearch.util.SPUtil;
 import com.lx.picturesearch.util.Utils;
 import com.z.dragimageviewapplication.DragImageActivity;
 
@@ -42,6 +43,7 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +85,11 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
 
 
     private void rebuild(){
+        if(null == SPUtil.readArray(this,currURL)) {
+            for (String url : listPic) {
+                SPUtil.saveArray(this, currURL, url);
+            }
+        }
         initView1();
         initData();
         adapter =viewMap.get(viewPagerPosition);
@@ -381,6 +388,13 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
         //提交网址
         if (!query.startsWith("http")) {
             currURL = "http://" + query;
+        }
+        String[] arr =SPUtil.readArray(this,currURL);
+        if(null != arr) {
+            listPic = Arrays.asList(arr);
+            rebuild();
+            update_infobar("");
+            return;
         }
         grabingDialog.show();
         pb_hor.setVisibility(View.VISIBLE);
