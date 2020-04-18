@@ -85,7 +85,7 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
 
 
     private void rebuild(){
-        if(null == SPUtil.readArray(this,currURL)) {
+        if(currURL.contains("ss=mb-") && null == SPUtil.readArray(this,currURL)) {
             for (String url : listPic) {
                 SPUtil.saveArray(this, currURL, url);
             }
