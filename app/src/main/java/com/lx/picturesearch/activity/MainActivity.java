@@ -37,6 +37,7 @@ import com.lx.picturesearch.util.Utils;
 import com.z.dragimageviewapplication.DragImageActivity;
 
 import org.jsoup.Jsoup;
+import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -86,9 +87,7 @@ public class MainActivity extends Activity implements View.OnClickListener, ISel
 
     private void rebuild(){
         if(currURL.contains("ss=mb-") && null == SPUtil.readArray(this,currURL)) {
-            for (String url : listPic) {
-                SPUtil.saveArray(this, currURL, url);
-            }
+            SPUtil.put(this, currURL, StringUtil.join(listPic,","));
         }
         initView1();
         initData();
