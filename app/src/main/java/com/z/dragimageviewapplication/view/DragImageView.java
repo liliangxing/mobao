@@ -8,6 +8,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.FloatMath;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -358,6 +359,7 @@ public class DragImageView extends ImageView implements
 
         //移动图片到屏幕中心
         matrix.postTranslate(dx, dy);
+        Log.i(TAG, "postTranslate: "+dx +" "+ dy);
 
         setImageMatrix(matrix);
     }

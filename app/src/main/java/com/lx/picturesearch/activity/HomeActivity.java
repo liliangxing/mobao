@@ -19,6 +19,7 @@ import com.lx.picturesearch.R;
 import com.lx.picturesearch.adapter.HomeAdapter;
 import com.lx.picturesearch.entity.HomeLink;
 import com.lx.picturesearch.entity.HomeLinkList;
+import com.lx.picturesearch.service.PasteCopyService;
 import com.lx.picturesearch.util.SPUtil;
 import com.lx.picturesearch.util.Utils;
 
@@ -66,7 +67,7 @@ public class HomeActivity extends Activity implements View.OnClickListener, Adap
 
         //初始化监听
         initListener();
-
+       // PasteCopyService.startCommand(this);
     }
 
 
