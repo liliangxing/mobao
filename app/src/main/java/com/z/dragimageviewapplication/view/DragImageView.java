@@ -293,7 +293,7 @@ public class DragImageView extends ImageView implements
      * @param bm
      */
     public void setImageBitmap(Bitmap bm) {
-
+        this.setScaleType(ScaleType.MATRIX);
         /** 获取图片宽高 **/
         bitmap_W = bm.getWidth();
         bitmap_H = bm.getHeight();
